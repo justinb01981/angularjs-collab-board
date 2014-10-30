@@ -23,9 +23,15 @@
 		<button type="button" class="close" ng-click="deleteNote(note.id)">&times;</button>
 		<input ng-model="note.title" ng-change="updateNote(note)" type="text" class="title" >
 		<textarea ng-model="note.body" ng-change="updateNote(note);" class="body" style="background-color:{{note.color}}; width:{{note.width}}px; height:{{note.height}}px;">{{note.body}}</textarea>
-		<button type="button" class="close" ng-click="shrinkNote(note)">-</button>
-		<button type="button" class="close" ng-click="growNote(note)">+</button>
-		<button type="button" class="close" ng-click="colorNote(note)">color</button>
+		<button type="button" class="close" ng-click="colorNote(note)">color</button>&nbsp;
+		<br>
+		<button type="button" class="close" ng-click="shrinkNote(note)">-</button>&nbsp
+		<button type="button" class="close" ng-click="growNote(note)">+</button>&nbsp;
+		<br>
+		<button type="button" class="close" ng-click="slideNote(note, 50, 0)">right</button>&nbsp;
+		<button type="button" class="close" ng-click="slideNote(note, -50, 0)">left</button>&nbsp;
+		<button type="button" class="close" ng-click="slideNote(note, 0, 50)">down</button>&nbsp;
+		<button type="button" class="close" ng-click="slideNote(note, 0, -50)">up</button>&nbsp;
 	</div>
 </body>
 </html>

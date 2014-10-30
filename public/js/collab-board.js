@@ -20,6 +20,8 @@ app.directive('stickyNote', function(socket) {
 						left: data.x,
 						top: data.y
 					});
+					scope.note.x = data.x;
+					scope.note.y = data.y;
 				}
 			});
 
@@ -34,6 +36,8 @@ app.directive('stickyNote', function(socket) {
 			socket.on('onNoteUpdated', function(data) {
 				// Update if the same note
 				if(data.id == $scope.note.id) {
+					if(data.x != null) $scope.note.x = data.x;
+					if(data.y != null) $scope.note.y = data.y;
 					if(data.title != null) $scope.note.title = data.title;
 					if(data.body != null) $scope.note.body = data.body;
 					if(data.width != null) $scope.note.width = data.width;
@@ -70,6 +74,16 @@ app.directive('stickyNote', function(socket) {
 				else idx += 1;
 				$scope.note.color = colorsList[idx];
 				socket.emit('updateNote', note);
+			};
+
+			$scope.slideNote = function(note, x, y) {
+				$scope.note.x = parseInt($scope.note.x)+parseInt(x);
+				$scope.note.y = parseInt($scope.note.y)+parseInt(y);
+				socket.emit('moveNote', {
+							id: $scope.note.id,
+							x: parseInt($scope.note.x),
+							y: parseInt($scope.note.y)
+				});
 			};
 
 			$scope.deleteNote = function(id) {

@@ -100,6 +100,7 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	socket.on('moveNote', function(data){
+		socket.emit('onNoteMoved', data);
 		socket.broadcast.emit('onNoteMoved', data);
 		noteUpdate(data, 0);
 	});
