@@ -4,6 +4,7 @@ app.directive('stickyNote', function(socket) {
 	var linker = function(scope, element, attrs) {
 			element.draggable({
 				stop: function(event, ui) {
+					var textarea = this.children[2];
 					socket.emit('moveNote', {
 						id: scope.note.id,
 						x: ui.position.left,
@@ -35,11 +36,39 @@ app.directive('stickyNote', function(socket) {
 				if(data.id == $scope.note.id) {
 					$scope.note.title = data.title;
 					$scope.note.body = data.body;
+					$scope.note.width = data.width;
+					$scope.note.height = data.height;
+					$scope.note.color = data.color;
 				}				
 			});
 
 			// Outgoing
 			$scope.updateNote = function(note) {
+				socket.emit('updateNote', note);
+			};
+
+			$scope.growNote = function(note) {
+				if($scope.note.width < 4096 && $scope.note.height < 4096) {
+					$scope.note.width = $scope.note.width += 50;
+					$scope.note.height = $scope.note.height += 50;
+					socket.emit('updateNote', note);
+				}
+			};
+
+			$scope.shrinkNote = function(note) {
+				if($scope.note.width > 100 && $scope.note.height > 100) {
+					$scope.note.width = $scope.note.width -= 50;
+					$scope.note.height = $scope.note.height -= 50;
+					socket.emit('updateNote', note);
+				}
+			};
+
+			$scope.colorNote = function(note) {
+				var colorsList = ['red', 'blue', 'green', 'yellow', 'white'];
+				var idx = colorsList.indexOf($scope.note.color);
+				if(idx < 0 || idx == 4) idx = 0;
+				else idx += 1;
+				$scope.note.color = colorsList[idx];
 				socket.emit('updateNote', note);
 			};
 
@@ -102,7 +131,10 @@ app.controller('MainCtrl', function($scope, socket) {
 		var note = {
 			id: new Date().getTime(),
 			title: 'New Note',
-			body: 'Pending'
+			body: 'Pending',
+			width: 300,
+			height: 200,
+			color: 'yellow'
 		};
 
 		$scope.notes.push(note);
