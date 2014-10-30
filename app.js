@@ -61,6 +61,7 @@ function noteUpdate(data, del) {
 		if (noteList[i].id == data.id) {
 			if(del) {
 				noteList.splice(i, 1);
+				noteListWrite();
 				return;
 			}
 			break;

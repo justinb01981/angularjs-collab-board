@@ -34,11 +34,11 @@ app.directive('stickyNote', function(socket) {
 			socket.on('onNoteUpdated', function(data) {
 				// Update if the same note
 				if(data.id == $scope.note.id) {
-					$scope.note.title = data.title;
-					$scope.note.body = data.body;
-					$scope.note.width = data.width;
-					$scope.note.height = data.height;
-					$scope.note.color = data.color;
+					if(data.title != null) $scope.note.title = data.title;
+					if(data.body != null) $scope.note.body = data.body;
+					if(data.width != null) $scope.note.width = data.width;
+					if(data.height != null) $scope.note.height = data.height;
+					if(data.color != null) $scope.note.color = data.color;
 				}				
 			});
 
@@ -49,16 +49,16 @@ app.directive('stickyNote', function(socket) {
 
 			$scope.growNote = function(note) {
 				if($scope.note.width < 4096 && $scope.note.height < 4096) {
-					$scope.note.width = $scope.note.width += 50;
-					$scope.note.height = $scope.note.height += 50;
+					$scope.note.width = parseInt($scope.note.width) + 50;
+					$scope.note.height = parseInt($scope.note.height) + 50;
 					socket.emit('updateNote', note);
 				}
 			};
 
 			$scope.shrinkNote = function(note) {
 				if($scope.note.width > 100 && $scope.note.height > 100) {
-					$scope.note.width = $scope.note.width -= 50;
-					$scope.note.height = $scope.note.height -= 50;
+					$scope.note.width = parseInt($scope.note.width) - 50;
+					$scope.note.height = parseInt($scope.note.height) - 50;
 					socket.emit('updateNote', note);
 				}
 			};
